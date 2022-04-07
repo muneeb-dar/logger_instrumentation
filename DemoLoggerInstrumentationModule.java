@@ -17,7 +17,7 @@ import java.util.List;
  */
 @AutoService(InstrumentationModule.class)
 public final class DemoLoggerInstrumentationModule extends InstrumentationModule {
-  public DemoServlet3InstrumentationModule() {
+  public DemoLoggerInstrumentationModule() {
     super("slf4j-api", "slf4j-api-1.7.31");
   }
 
