@@ -17,7 +17,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.namedOneOf;
 
-public class DemoServlet3Instrumentation implements TypeInstrumentation {
+public class DemoLoggerInstrumentation implements TypeInstrumentation {
   @Override
   public ElementMatcher<TypeDescription> typeMatcher() {
     return named("org.slf4j.Logger");
