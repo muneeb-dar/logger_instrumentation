@@ -22,7 +22,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.namedOneOf;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class DemoServlet3Instrumentation implements TypeInstrumentation {
+public class DemoLoggerInstrumentation implements TypeInstrumentation {
   @Override
   public ElementMatcher<ClassLoader> classLoaderOptimization() {
     return hasClassesNamed("org.slf4j.Logger");
@@ -47,7 +47,7 @@ public class DemoServlet3Instrumentation implements TypeInstrumentation {
   }
 
   @SuppressWarnings("unused")
-  public static class DemoServlet3Advice {
+  public static class DemoLoggerAdvice {
 
     @Advice.OnMethodEnter(suppress = Throwable.class)
     public static void onEnter(@Advice.Argument(0) String  message,@Advice.Argument(1) Throwable  throwable){
