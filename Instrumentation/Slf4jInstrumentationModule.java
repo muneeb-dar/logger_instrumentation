@@ -16,11 +16,16 @@ import java.util.List;
  * This is a demo instrumentation
  */
 @AutoService(InstrumentationModule.class)
-public final class DemoLoggerInstrumentationModule extends InstrumentationModule {
-  public DemoLoggerInstrumentationModule() {
+public final class Slf4jInstrumentationModule extends InstrumentationModule {
+  public Slf4jInstrumentationModule() {
     super("slf4j-api", "slf4j-api-1.7.31");
   }
 
+  /*
+  We want this instrumentation to be applied after the standard servlet instrumentation.
+  The latter creates a server span around http request.
+  This instrumentation needs access to that server span.
+   */
 //  @Override
 //  public int order() {
 //    return 1;
@@ -33,6 +38,6 @@ public final class DemoLoggerInstrumentationModule extends InstrumentationModule
 
   @Override
   public List<TypeInstrumentation> typeInstrumentations() {
-    return singletonList(new DemoLoggerInstrumentation());
+    return singletonList(new Slf4jInstrumentation());
   }
 }

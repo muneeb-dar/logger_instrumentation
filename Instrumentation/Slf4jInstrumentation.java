@@ -22,14 +22,14 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.namedOneOf;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 
-public class DemoLoggerInstrumentation implements TypeInstrumentation {
+public class Slf4jInstrumentation implements TypeInstrumentation {
   @Override
   public ElementMatcher<ClassLoader> classLoaderOptimization() {
-    return hasClassesNamed("org.slf4j.Logger");
+    return hasClassesNamed(new StringBuilder("org.").append("slf4j.Logger").toString());
   }
   @Override
   public ElementMatcher<TypeDescription> typeMatcher() {
-    return implementsInterface(named("org.slf4j.Logger"));
+    return implementsInterface(named(new StringBuilder("org.").append("slf4j.Logger").toString()));
   }
 
   @Override
@@ -43,18 +43,23 @@ public class DemoLoggerInstrumentation implements TypeInstrumentation {
                 takesArgument(
                     1, named("java.lang.Throwable")))
             .and(isPublic()),
-        this.getClass().getName() + "$DemoServlet3Advice");
+        this.getClass().getName() + "$LoggerAdvice");
   }
 
   @SuppressWarnings("unused")
-  public static class DemoLoggerAdvice {
+  public static class LoggerAdvice {
 
     @Advice.OnMethodEnter(suppress = Throwable.class)
     public static void onEnter(@Advice.Argument(0) String  message,@Advice.Argument(1) Throwable  throwable){
-      Span.current().recordException(throwable);
-      System.out.println("Testing otel");
+      /*
+      instead of span.current use Java8BytecodeBridge.currentSpan()
+       */
+      Java8BytecodeBridge.currentSpan().setAttribute("error",true);
       Java8BytecodeBridge.currentSpan().recordException(throwable);
+      /*
+      Span.current().recordException(throwable);
       Java8BytecodeBridge.currentSpan().setAttribute("TESTING","HI THERE");
+       */
 
 
       }
